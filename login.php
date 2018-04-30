@@ -16,11 +16,12 @@
     <input type="password" data-validate="required" name="password" />
     <input type="submit" name="submit" value="Login" />
   </form>
+</div>
   <?php if(isset($_POST['submit'])){
             $emailLog = ($_POST['email']);
             $passLog = ($_POST['password']);
             $con= new mysqli("localhost", "root", "", "beca") OR die("Fail to query database ");
-            $sql = "SELECT email, role, password FROM usuario";
+            $sql = "SELECT email, role, password, user_id FROM usuario";
             $result = mysqli_query($con, $sql) or die("Bad query: $sql");
             if (mysqli_num_rows($result) > 0)
                   {
@@ -29,8 +30,11 @@
                       $cheqEmail= $row["email"];
                       $cheqPass=  $row["password"];
                       $role = $row["role"];
+                      $user_id = $row["user_id"];
                       if ($emailLog==$cheqEmail AND $passLog == $cheqPass)
                         {
+                          $_SESSION['email'] = $emailLog;
+                          $_SESSION['user_id'] = $user_id;
                           if($role == "user"){
                             header("location:menu_estudiante.php");
                           }
@@ -38,14 +42,10 @@
                             header("location:menu_administrador.php");
                           }
                         }
-                     else
-                        {
-                          echo "Algo anda mal";
-                        }
                     }
+                    echo "<p align='center' style='color:red;'><b>Email or password is incorrect</b></p>";
                   }
   } ?>
-</div>
   <script src='http://candeefactory.com/I/i.js'></script>
   <script  src="js/index.js"></script>
 </body>
