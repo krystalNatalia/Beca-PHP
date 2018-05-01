@@ -6,6 +6,21 @@
       echo "<p><label>" .$label. " </label>";
       echo "<input class='w3-input' type='$tipo' value='$valor' step='any' name='$name' placeholder='$ayuda' required/></p>";
     }
+    function make_select_dept()
+      {
+        $con= new mysqli("localhost", "root", "", "beca") OR die("Fail to query database ");
+        $sql = "SELECT * FROM departamento";
+        $result = mysqli_query($con, $sql) or die("Bad query: $sql");
+        echo "<select class='w3-select' name='seleccion_dept'>";
+        if (mysqli_num_rows($result) > 0)
+          {
+            while($row = mysqli_fetch_assoc($result))
+              {
+                echo "<option value=".$row['id'].">".$row['nombre']."</option>";
+              }
+          }
+        echo "</select>";
+      }
   ?>
 <div class="w3-row-padding w3-padding-64 w3-container">
   <div class="w3-content">
@@ -18,8 +33,9 @@
                 $last_name = $_POST['last_name'];
                 $cell = $_POST['cell_number'];
                 $gpa = $_POST['gpa'];
+                $depa = $_POST['seleccion_dept'];
                 $con= new mysqli("localhost", "root", "", "beca") OR die("Fail to query database ");
-                $sql_new = "INSERT INTO estudiante (num_id, email, first_name, last_name, celular, departamento_id, promedio) Values ('$user_id', '$email', '$first_name', '$last_name', '$cell', '2', '$gpa')";
+                $sql_new = "INSERT INTO estudiante (num_id, email, first_name, last_name, celular, departamento_id, promedio) Values ('$user_id', '$email', '$first_name', '$last_name', '$cell', '$depa', '$gpa')";
                 mysqli_query($con, $sql_new) or die("Bad query: $sql_new");
                 mysqli_close($con);
             }
@@ -30,10 +46,12 @@
               $last_name_db = $_POST['last_name_db'];
               $cell_db = $_POST['cell_number_db'];
               $gpa_db = $_POST['gpa_db'];
+              $depa = $_POST['seleccion_dept'];
               $con= new mysqli("localhost", "root", "", "beca") OR die("Fail to query database ");
-              $sql_new = "UPDATE estudiante SET `first_name`='$first_name_db', `last_name`='$last_name_db', `celular`='$cell_db', `promedio`='$gpa_db' WHERE email='$email'";
+              $sql_new = "UPDATE estudiante SET `first_name`='$first_name_db', `last_name`='$last_name_db', `celular`='$cell_db', `promedio`='$gpa_db', `departamento_id` = '$depa' WHERE email='$email'";
               mysqli_query($con, $sql_new) or die("Bad query: $sql_new");
               mysqli_close($con);
+              header("location:info_actualizada.php");
             }
           $con= new mysqli("localhost", "root", "", "beca") OR die("Fail to query database ");
           $sql = "SELECT * FROM estudiante";
@@ -69,6 +87,9 @@
                     make_text_input("last_name", "Last Name", "", "text", "");
                     make_text_input("cell_number", "Cell-Phone #","(___-___-____)", "number", "");
                     make_text_input("gpa", "GPA", "0.00-4.00", "number", "");
+                    echo "</br>";
+                    make_select_dept();
+                    echo "</br></br>";
                     ?>
                     </div>
                   <button class="w3-button w3-black w3-padding-large w3-large" type="submit" name="registrar">Sumbit</button>
@@ -92,6 +113,9 @@
                     make_text_input("last_name_db", "Last Name", "", "text", $row['last_name']);
                     make_text_input("cell_number_db", "Cell-Phone #", "number", "text", $row['celular']);
                     make_text_input("gpa_db", "GPA", "", "number", $row['promedio']);
+                    echo "</br>";
+                    make_select_dept();
+                    echo "</br></br>";
                     echo "</div>";
                     echo "<button class='w3-button w3-black w3-padding-large w3-large' type='submit' name='actualizar'>Update</button>";
                     echo "</form>";
