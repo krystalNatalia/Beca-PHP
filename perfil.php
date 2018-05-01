@@ -4,7 +4,7 @@
   function make_text_input($name, $label, $size, $ayuda, $tipo)
     {
       echo "<p><label>" .$label. " </label>";
-      echo "<input class='w3-input' type='$tipo' name='$name' placeholder='$ayuda' size='$size' required/></p>";
+      echo "<input class='w3-input' type='$tipo' step='any' name='$name' placeholder='$ayuda' size='$size' required/></p>";
     }
   ?>
 <div class="w3-row-padding w3-padding-64 w3-container">
