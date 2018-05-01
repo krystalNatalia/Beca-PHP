@@ -36,7 +36,7 @@
                           $_SESSION['email'] = $emailLog;
                           $_SESSION['user_id'] = $user_id;
                           if($role == "user"){
-                            header("location:menu_estudiante.php");
+                            header("location:perfil.php");
                           }
                           else if($role == "admin") {
                             header("location:menu_administrador.php");
